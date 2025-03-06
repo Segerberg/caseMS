@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}Ärenden - Ärendehanteringssystem{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Ärendelista</h2>
+    <a href="{{ url_for('cases.new_case') }}" class="btn btn-primary disabled">Nytt ärende</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>DNR</th>
+                        <th>Registrator</th>
+                        <th>Titel</th>
+                        <th>Inkomm/Utgående</th>
+                        <th>Status</th>
+                        <th>Handläggare</th>
+                        <th>Registreringsdatum</th>
+                        <th>Åtgärder</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for case in cases %}
+                    <tr>
+                        <td>{{ case.DNR }}</td>
+                        <td>{{ case.REG_NAMN }}</td>
+                        <td>{{ case.ATEXT|truncate(30) }}</td>
+                        <td>{{ case.IN_UT }}</td>
+                        <td>{{ case.STAT }}</td>
+                        <td>{{ case.HAND_NAMN }}</td>
+                        <td>{{ case.REGDAT }}</td>
+                        <td>
+                            <a href="{{ url_for('cases.view_case', dnr=case.DNR) }}" class="btn btn-sm btn-info">Visa</a>
+                            <a href="{{ url_for('cases.edit_case', dnr=case.DNR) }}" class="btn btn-sm btn-warning disabled">Redigera</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">Inga ärenden hittades</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+
+{% block title %}Nytt ärende - Ärendehanteringssystem{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Skapa nytt ärende</h2>
+    <a href="{{ url_for('cases.index') }}" class="btn btn-secondary">Avbryt</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('cases.new_case') }}">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="reg_id" class="form-label">Registrator *</label>
+                    <select class="form-select" id="reg_id" name="reg_id" required>
+                        <option value="">Välj registrator</option>
+                        {% for reg in registries %}
+                            <option value="{{ reg.REG_ID }}">{{ reg.REG_NAMN }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="in_ut" class="form-label">Inkommande/Utgående *</label>
+                    <select class="form-select" id="in_ut" name="in_ut" required>
+                        <option value="IN">Inkommande</option>
+                        <option value="UT">Utgående</option>
+                        <option value="INTERN">Intern</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="doss_nr" class="form-label">Dossié</label>
+                    <select class="form-select" id="doss_nr" name="doss_nr">
+                        <option value="">Välj dossié</option>
+                        {% for doss in dossiers %}
+                            <option value="{{ doss.DOSS_NR }}">{{ doss.NAMN }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="hand_id" class="form-label">Handläggare</label>
+                    <select class="form-select" id="hand_id" name="hand_id">
+                        <option value="">Välj handläggare</option>
+                        {% for hand in handlers %}
+                            <option value="{{ hand.HAND_ID }}">{{ hand.HAND_NAMN }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="enht_kod" class="form-label">Enhet</label>
+                    <select class="form-select" id="enht_kod" name="enht_kod">
+                        <option value="">Välj enhet</option>
+                        {% for unit in units %}
+                            <option value="{{ unit.ENHT_KOD }}">{{ unit.ENHT_NAMN }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="stat" class="form-label">Status *</label>
+                    <select class="form-select" id="stat" name="stat" required>
+                        <option value="Ny">Ny</option>
+                        <option value="Pågående">Pågående</option>
+                        <option value="Vilande">Vilande</option>
+                        <option value="Avslutad">Avslutad</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="inkupp" class="form-label">Datum</label>
+                    <input type="date" class="form-control" id="inkupp" name="inkupp">
+                </div>
+                <div class="col-md-4">
+                    <label for="regdat" class="form-label">Registreringsdatum *</label>
+                    <input type="date" class="form-control" id="regdat" name="regdat" value="{{ today }}" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="avsdat" class="form-label">Avslutad datum</label>
+                    <input type="date" class="form-control" id="avsdat" name="avsdat">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="motpart_bet" class="form-label">Motpart</label>
+                    <input type="text" class="form-control" id="motpart_bet" name="motpart_bet">
+                </div>
+                <div class="col-md-6">
+                    <label for="fran_till" class="form-label">Från/Till</label>
+                    <input type="text" class="form-control" id="fran_till" name="fran_till">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="atext" class="form-label">Beskrivning *</label>
+                <textarea class="form-control" id="atext" name="atext" rows="4" required></textarea>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Skapa ärende</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

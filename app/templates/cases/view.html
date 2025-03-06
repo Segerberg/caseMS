@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+
+{% block title %}Ärende {{ case.DNR }} - Ärendehanteringssystem{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Ärende {{ case.DNR }}</h2>
+    <div>
+        <a href="{{ url_for('cases.index') }}" class="btn btn-secondary">Tillbaka</a>
+        <a href="{{ url_for('cases.edit_case', dnr=case.DNR) }}" class="btn btn-warning disabled">Redigera</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="card-title">Ärendeinformation</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Register:</div>
+                    <div class="col-md-9">{{ case.REG_NAMN }} ({{ case.REG_ID }})</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Inkommande/Utgående:</div>
+                    <div class="col-md-9">{{ case.IN_UT }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Dossié:</div>
+                    <div class="col-md-9">{{ case.DOSS_NAMN }} ({{ case.DOSS_NR }})</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Handläggare:</div>
+                    <div class="col-md-9">{{ case.HAND_NAMN }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Enhet:</div>
+                    <div class="col-md-9">{{ case.ENHT_NAMN }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Datum:</div>
+                    <div class="col-md-9">{{ case.INKUPP }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Registreringsdatum:</div>
+                    <div class="col-md-9">{{ case.REGDAT }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Avslutad datum:</div>
+                    <div class="col-md-9">{{ case.AVSDAT }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Status:</div>
+                    <div class="col-md-9">{{ case.STAT }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Motpart:</div>
+                    <div class="col-md-9">{{ case.MOTPART_BET }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Från/Till:</div>
+                    <div class="col-md-9">{{ case.FRAN_TILL }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Beskrivning:</div>
+                    <div class="col-md-9">{{ case.ATEXT }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Anteckningar (Notes) -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="card-title">Anteckningar</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('cases.add_note', dnr=case.DNR) }}" class="mb-4">
+                    <div class="mb-3">
+                        <label for="ant_text" class="form-label">Ny anteckning</label>
+                        <textarea class="form-control" id="ant_text" name="ant_text" rows="3" required></textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="in_ut" class="form-label">Typ</label>
+                            <select class="form-select" id="in_ut" name="in_ut">
+                                <option value="IN">Inkommande</option>
+                                <option value="UT">Utgående</option>
+                                <option value="INTERN">Intern</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="avsmot" class="form-label">Avsändare/Mottagare</label>
+                            <input type="text" class="form-control" id="avsmot" name="avsmot">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary disabled">Lägg till anteckning</button>
+                </form>
+
+                <hr>
+
+                {% for note in notes %}
+                <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>{{ note.DATUMIN }} - {{ note.IN_UT }}</span>
+                        <span>{{ note.HAND_NAMN }}</span>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ note.ANT_TEXT }}</p>
+                        {% if note.AVSMOT %}
+                            <p class="text-muted">Avsändare/Mottagare: {{ note.AVSMOT }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% else %}
+                <p>Inga anteckningar finns för detta ärende.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <!-- Logg -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Logg</h4>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for log in logs %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ log.LOGDAT }}</h6>
+                            <small>{{ log.REG_NAMN }}</small>
+                        </div>
+                        <p class="mb-1">{{ log.LOGFLT }}</p>
+                    </div>
+                    {% else %}
+                    <p>Ingen logg finns för detta ärende.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

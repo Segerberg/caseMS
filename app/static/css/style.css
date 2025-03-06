@@ -1,0 +1,48 @@
+/* Custom styles for the case management system */
+
+body {
+    background-color: #f8f9fa;
+    padding-bottom: 80px;
+}
+
+
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+/* Status colors */
+.status-new {
+    background-color: #cff4fc;
+    color: #055160;
+}
+
+.status-ongoing {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+.status-paused {
+    background-color: #e2e3e5;
+    color: #41464b;
+}
+
+.status-completed {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.disabled-link {
+    pointer-events: none;
+    color: gray; /* Optional: visually indicate it's disabled */
+}
